@@ -5,7 +5,7 @@ function App() {
   const [newTaskText, setNewTaskText] = useState('')
 
   const fetchTasks = () => {
-    fetch('http:///tasks')
+    fetch('https://taskmanager.thpstyle.vn/tasks')
       .then(response => response.json())
       .then(data => setTasks(data))
       .catch(error => console.error("Lỗi kết nối:", error));
@@ -17,18 +17,16 @@ function App() {
   const handleAddTask = (e) => {
     e.preventDefault();
     if (!newTaskText.trim()) return;
-    fetch('http:///tasks', {
+    fetch('https://taskmanager.thpstyle.vn/tasks', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title: newTaskText, completed: false }),
     }).then(() => { setNewTaskText(''); fetchTasks(); });
   }
 
-  // --- TÍNH NĂNG MỚI ---
-  
   // 1. Hàm cập nhật trạng thái (Toggle)
   const toggleTask = (task) => {
-    fetch(`http:///tasks/${task.id}`, {
+    fetch(`https://taskmanager.thpstyle.vn/tasks/${task.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...task, completed: !task.completed }),
@@ -37,7 +35,7 @@ function App() {
 
   // 2. Hàm xóa công việc
   const deleteTask = (id) => {
-    fetch(`http:///tasks/${id}`, { method: 'DELETE' })
+    fetch(`https://taskmanager.thpstyle.vn/tasks/${id}`, { method: 'DELETE' })
       .then(() => fetchTasks());
   }
 
