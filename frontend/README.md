@@ -42,3 +42,59 @@ Hệ thống hiện đã hoàn thiện về logic CRUD cơ bản. Các bước t
 - **Thư viện kết nối PostgreSQL:** Cài đặt bằng lệnh `pip install psycopg2-binary`.
 ---
 *Tài liệu được biên soạn dựa trên quá trình xây dựng thực tế. Chúc bạn tiếp tục làm chủ hệ thống của mình!*
+🌟 1. Tổng quan kiến trúc hệ thống
+Hệ thống của chúng ta được vận hành theo mô hình phân tách rõ ràng (Decoupled Architecture) trên một máy chủ Windows Server (103.228.74.205):
+
+Database (Kho lưu trữ): PostgreSQL chạy ngầm như một Windows Service ổn định 24/7.
+
+Backend (Nhà bếp xử lý logic): FastAPI (Python) chạy ngầm thông qua công cụ quản lý dịch vụ NSSM (TaskManagerBackend).
+
+Frontend (Sảnh đón khách giao diện): React (đã được build tĩnh thành các file HTML/JS/CSS) và được quản lý trực tiếp bởi IIS Web Server dưới tên miền phụ taskmanager.thpstyle.vn.
+
+🛠️ 2. Công cụ và thành phần đã sử dụng
+Hệ điều hành: Windows Server (VPS).
+
+Web Server: IIS (Internet Information Services) - Đóng vai trò lễ tân điều hướng cổng 80/443.
+
+Process Manager (Quản lý dịch vụ nền): NSSM (Non-Sucking Service Manager) để biến FastAPI thành Windows Service.
+
+Database: PostgreSQL.
+
+Tên miền & Mạng: Custom Subdomain taskmanager.thpstyle.vn trỏ về IP VPS.
+
+🚀 3. Sơ đồ vận hành & Quy trình cấu hình đã thực hiện
+A. Cơ sở dữ liệu (PostgreSQL)
+Được cài đặt trực tiếp trên VPS và cấu hình chạy tự động ở chế độ Automatic trong services.msc.
+
+Tạo schema/database riêng trên VPS để phục vụ môi trường thực tế (production).
+
+B. Backend (FastAPI + NSSM)
+Thư mục làm việc: C:\Quan_ly_cong_viec\backend
+
+Cài đặt dịch vụ chạy ngầm với NSSM:
+
+Bash
+C:\tools\nssm.exe install TaskManagerBackend
+Cấu hình chi tiết trong NSSM:
+
+Path: C:\Quan_ly_cong_viec\backend\venv\Scripts\python.exe
+
+Startup directory: C:\Quan_ly_cong_viec\backend
+
+Arguments: -m uvicorn main:app --host 127.0.0.1 --port 8000
+
+Ý nghĩa: Giúp FastAPI luôn chạy ngầm, nhận yêu cầu nội bộ từ IIS và tự khởi động lại khi VPS bật máy.
+
+C. Frontend (React + IIS + Subdomain)
+Thư mục chứa bản build: C:\Quan_ly_cong_viec\frontend\dist
+
+Cấu hình trên IIS:
+
+Tạo Website mới mang tên TaskManagerFrontend, trỏ đường dẫn vật lý (Physical Path) về thư mục dist của React.
+
+Cấu hình Bindings: Thêm cổng 80 với Host name là taskmanager.thpstyle.vn để tách biệt hoàn toàn với các trang web khác trên cùng VPS.
+
+Đảm bảo tắt hoặc cấu hình đúng Default Web Site để tránh xung đột cổng.
+
+🔐 4. Kế hoạch tiếp theo (Tiếp tục vào lần tới)
+Cài đặt chứng chỉ bảo mật SSL (HTTPS) cho taskmanager.thpstyle.vn thông qua công cụ Certify The Web để khóa ổ khóa xanh an toàn cho trang web.
