@@ -97,4 +97,5 @@ Cấu hình Bindings: Thêm cổng 80 với Host name là taskmanager.thpstyle.v
 Đảm bảo tắt hoặc cấu hình đúng Default Web Site để tránh xung đột cổng.
 
 🔐 4. Kế hoạch tiếp theo (Tiếp tục vào lần tới)
-Cài đặt chứng chỉ bảo mật SSL (HTTPS) cho taskmanager.thpstyle.vn thông qua công cụ Certify The Web để khóa ổ khóa xanh an toàn cho trang web.
+Cài đặt chứng chỉ bảo mật SSL (HTTPS) cho taskmanager.thpstyle.vn thông qua công cụ Certify The Web để khóa ổ khóa xanh an toàn cho trang web.Bước 1: Tạo ra một sự thay đổi nhỏ trên máy cá nhân
+Anh mở một file bất kỳ trong dự án (ví dụ file App.jsx hoặc thậm chí chỉ cần mở file README.md hoặc tạo một ghi chú nhỏ), thêm vào một dòng chữ bất kỳ (ví dụ: // Kiểm tra Git hoạt động). Sau đó lưu lại.
